@@ -37,15 +37,24 @@ angular
           var passed_in_options = $scope.$eval($attrs.datetimepickerOptions);
           var options = jQuery.extend({}, default_options, passed_in_options);
 
-          $element
-            .on('dp.change', function (on_change_event) {
-              if (ngModelCtrl) {
-                $timeout(function () {
-                  ngModelCtrl.$setViewValue(on_change_event.target.value);
-                });
-              }
-            })
-            .datetimepicker(options);
+          if (ngModelCtrl) {
+            $timeout(function(){
+              $element.val(ngModelCtrl.$viewValue)
+
+              $element
+                .on('dp.change', function (on_change_event) {
+                  if (ngModelCtrl) {
+                    $timeout(function () {
+                      ngModelCtrl.$setViewValue(on_change_event.target.value);
+                    });
+                  }
+                })
+                .datetimepicker(options);
+
+            });
+          } else {
+            $element.datetimepicker(options);
+          };
         }
       };
     }
